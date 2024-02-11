@@ -5,11 +5,11 @@ export const cardsData = [
     components: [
       {
         id: 100,
-        name: "material ui"
+        widgetId: 1
       },
       {
         id: 200,
-        name: "bootstrap"
+        widgetId: 1
       },
     ]
   },
@@ -19,11 +19,11 @@ export const cardsData = [
     components: [
       {
         id: 300,
-        name: "react"
+        widgetId: 1
       },
       {
         id: 400,
-        name: "node"
+        widgetId: 1
       },
     ]
   },
@@ -33,11 +33,11 @@ export const cardsData = [
     components: [
       {
         id: 500,
-        name: "redux"
+        widgetId: 1
       },
       {
         id: 600,
-        name: "recoil"
+        widgetId: 1
       },
     ]
   },
@@ -47,16 +47,14 @@ export const cardsData = [
     components: [
       {
         id: 501,
-        name: "Next-auth"
+        widgetId: 1
       },
       {
         id: 601,
-        name: "Dnd"
+        widgetId: 1
       },
     ]
   }
-
-
 ]
 
 

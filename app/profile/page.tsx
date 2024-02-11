@@ -8,7 +8,7 @@ export default async function Profile() {
 
     return (
         <>
-            <section className="bg-ct-blue-600  min-h-screen relative">
+            <section className="bg-ct-blue-600  min-h-screen relative text-white">
                 <img src="./img/login-bg.png" alt="image" className="login__bg blur-md" />
                 <div className="absolute bg-ct-dark-100 rounded-md w-full h-full flex justify-center items-center">
                     <div>
