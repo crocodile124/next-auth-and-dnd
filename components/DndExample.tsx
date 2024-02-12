@@ -8,6 +8,7 @@ import { DndContext } from "@/context/DndContext";
 import styles from './Modal.module.css';
 import ConfirmModal from "./ConfirmModal";
 import WidgetSelector from '../components/dashboardcreation/WidgetSelector';
+import EditModal from "./EditModal";
 
 interface Cards {
     id: number;
@@ -18,13 +19,18 @@ interface Cards {
     }[];
 }
 const DndExample = () => {
-    const [dashboardName, setDashboardName] = useState<string>('');
-    const [selectedWidget, setselectedWidget] = useState<number>(0);
     const [data, setData] = useState<Cards[] | []>([])
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedWidget, setselectedWidget] = useState<number>(0);
+
     const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
     const [idToFilter, setIdToFilter] = useState<number>(0);
+
     const [isLockedLayout, setIsLockedLayout] = useState<boolean>(true);
+
+    const [idToEdit, setIdToEdit] = useState<number>(0);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
     const handleFilter = () => {
         // Handle confirm action
@@ -40,10 +46,6 @@ const DndExample = () => {
         setConfirmModalOpen(false);
     };
 
-    const handleNameChange = (name: string) => {
-        setDashboardName(name);
-    };
-
     const handleWidgetSelect = (widgetId: number) => {
         setselectedWidget(widgetId);
     };
@@ -53,7 +55,6 @@ const DndExample = () => {
     };
 
     const handleSaveDashboard = () => {
-        const id = 0;
         setData(prevData => {
             const newData = [...prevData];
             const component = { id: newData[0].components.length + 10, widgetId: selectedWidget };
@@ -67,6 +68,25 @@ const DndExample = () => {
         console.log(data);
         closeModal();
     };
+
+    const editDashboard = () => {
+        console.log("changed ", selectedWidget);
+        setData(data.map(card => ({
+            ...card,
+            components: card.components.map(component => {
+                if (component.id === idToEdit) {
+                    return { ...component, widgetId: selectedWidget };
+                }
+                return component;
+            })
+        })));
+        console.log(data);
+        cancelEditModal();
+    }
+    const cancelEditModal = () => {
+        setIsEditModalOpen(false);
+    }
+
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -232,7 +252,11 @@ const DndExample = () => {
                                                                         >
                                                                             <div className="px-2 py-2 border bg-white rounded-lg h-full text-lg">
                                                                                 <div className="flex justify-end items-center right-0">
-                                                                                    <button className="p-1">
+                                                                                    <button className="p-1" onClick={() => {
+                                                                                        setselectedWidget(component.widgetId);
+                                                                                        setIdToEdit(component.id);
+                                                                                        setIsEditModalOpen(true);
+                                                                                    }}>
                                                                                         <svg fill="#808080" version="1.1" id="Capa_1" width="12px" height="12px" viewBox="0 0 494.936 494.936">
                                                                                             <g>
                                                                                                 <g>
@@ -258,6 +282,7 @@ const DndExample = () => {
                                                                                             <polygon points="31.112,1.414 29.698,0 15.556,14.142 1.414,0 0,1.414 14.142,15.556 0,29.698 1.414,31.112 15.556,16.97 29.698,31.112 31.112,29.698 16.97,15.556 " />
                                                                                         </svg>
                                                                                     </button>
+                                                                                    <EditModal isOpen = {isEditModalOpen} idToEdit={selectedWidget} onClose={cancelEditModal} onEdit={editDashboard} widgetSelect={handleWidgetSelect} widgetDeselect={handleWidgetDeselect} />
                                                                                     <ConfirmModal isOpen={confirmModalOpen} onClose={handleCancel} onConfirm={handleFilter} />
                                                                                 </div>
                                                                                 <div>

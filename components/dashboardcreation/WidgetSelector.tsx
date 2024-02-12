@@ -14,13 +14,13 @@ const WidgetSelector: React.FC<WidgetSelectorProps> = ({ selectedWidget, onWidge
     'Widget 1',
     'Widget 2',
     'Widget 3',
-    // Add more widget options as needed
   ]);
-
   const handleWidgetClick = (widgetId: number) => {
+    console.log(widgetId, selectedWidget);
     if (selectedWidget == widgetId) {
       onWidgetDeselect(widgetId);
     } else {
+      console.log("selected: ", widgetId);
       onWidgetSelect(widgetId);
     }
   };
