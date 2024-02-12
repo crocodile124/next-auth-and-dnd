@@ -27,7 +27,7 @@ const DndExample = () => {
     const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
     const [idToFilter, setIdToFilter] = useState<number>(0);
 
-    const [isLockedLayout, setIsLockedLayout] = useState<boolean>(true);
+    const [isLockedLayout, setIsLockedLayout] = useState<boolean>(false);
 
     const [idToEdit, setIdToEdit] = useState<number>(0);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -57,7 +57,17 @@ const DndExample = () => {
     const handleSaveDashboard = () => {
         setData(prevData => {
             const newData = [...prevData];
-            const component = { id: newData[0].components.length + 10, widgetId: selectedWidget };
+            const currentTime = new Date();
+
+            // Extract hours, minutes, and seconds
+            const year = currentTime.getFullYear();
+            const month = currentTime.getMonth();
+            const day = currentTime.getDay();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const seconds = currentTime.getSeconds();
+          
+            const component = { id: year + month + day + hours * minutes * seconds, widgetId: selectedWidget };
             if (newData.length > 0) {
                 const newWidget = [...newData[0].components];
                 newWidget.push(component);
@@ -96,6 +106,20 @@ const DndExample = () => {
         setIsModalOpen(false);
     };
 
+    const saveLayout = async () => {
+        setIsLockedLayout(!isLockedLayout);
+        console.log(isLockedLayout);
+        if (!isLockedLayout) {
+            const res = await fetch("/api/savelayout", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+    }
+
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
         if (!destination) return;
@@ -120,7 +144,29 @@ const DndExample = () => {
         }
     };
     useEffect(() => {
-        setData(cardsData)
+        if (cardsData.length > 0) {
+            const fetchData = async () => {
+                const res = await fetch("/api/savelayout", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                const resData = await res.json();
+                console.log(resData);
+                try {
+                    cardsData[0] = resData.column1[0];
+                    cardsData[1] = resData.column2[0];
+                    cardsData[2] = resData.column3[0];
+                    cardsData[3] = resData.column4[0];
+                } catch {
+                }
+
+                setData(cardsData)
+
+            }
+            fetchData();
+        }
     }, [])
     if (!data.length) {
         return <LoadingSkeleton />
@@ -128,7 +174,7 @@ const DndExample = () => {
     return (
         <DndContext onDragEnd={onDragEnd}>
             <div className="flex justify-center items-center mb-3">
-                <button className={`left-0 mr-2 ${isLockedLayout ? "m-2" : ""}`} onClick={() => setIsLockedLayout(!isLockedLayout)}>{isLockedLayout ? <svg fill="#494c4e" version="1.1" id="Capa_1" width="22px" height="26px" viewBox="0 0 574.922 574.922">
+                <button className={`left-0 mr-2 ${isLockedLayout ? "m-2" : ""}`} onClick={saveLayout}>{isLockedLayout ? <svg fill="#494c4e" version="1.1" id="Capa_1" width="22px" height="26px" viewBox="0 0 574.922 574.922">
                     <g>
                         <g>
                             <path d="M491.102,238.031v-33.892c0-27.472-5.39-54.146-16.021-79.278c-10.26-24.255-24.937-46.028-43.624-64.717
@@ -195,27 +241,7 @@ const DndExample = () => {
                                             return (
                                                 <div className="bg-gray-200 mx-1 my-1 rounded-lg h-64 text-black">
                                                     <div className="px-2 py-2 border bg-white rounded-lg h-full text-lg">
-                                                        <div className="flex justify-end items-center right-0">
-                                                            <button className="p-1">
-                                                                <svg fill="#808080" version="1.1" id="Capa_1" width="12px" height="12px" viewBox="0 0 494.936 494.936">
-                                                                    <g><g><path d="M389.844,182.85c-6.743,0-12.21,5.467-12.21,12.21v222.968c0,23.562-19.174,42.735-42.736,42.735H67.157
-                                                                                c-23.562,0-42.736-19.174-42.736-42.735V150.285c0-23.562,19.174-42.735,42.736-42.735h267.741c6.743,0,12.21-5.467,12.21-12.21
-                                                                                s-5.467-12.21-12.21-12.21H67.157C30.126,83.13,0,113.255,0,150.285v267.743c0,37.029,30.126,67.155,67.157,67.155h267.741
-                                                                                c37.03,0,67.156-30.126,67.156-67.155V195.061C402.054,188.318,396.587,182.85,389.844,182.85z"/>
-                                                                        <path d="M483.876,20.791c-14.72-14.72-38.669-14.714-53.377,0L221.352,229.944c-0.28,0.28-3.434,3.559-4.251,5.396l-28.963,65.069
-                                                                                c-2.057,4.619-1.056,10.027,2.521,13.6c2.337,2.336,5.461,3.576,8.639,3.576c1.675,0,3.362-0.346,4.96-1.057l65.07-28.963
-                                                                                c1.83-0.815,5.114-3.97,5.396-4.25L483.876,74.169c7.131-7.131,11.06-16.61,11.06-26.692
-                                                                                C494.936,37.396,491.007,27.915,483.876,20.791z M466.61,56.897L257.457,266.05c-0.035,0.036-0.055,0.078-0.089,0.107
-                                                                                l-33.989,15.131L238.51,247.3c0.03-0.036,0.071-0.055,0.107-0.09L447.765,38.058c5.038-5.039,13.819-5.033,18.846,0.005
-                                                                                c2.518,2.51,3.905,5.855,3.905,9.414C470.516,51.036,469.127,54.38,466.61,56.897z"/>
-                                                                    </g></g>
-                                                                </svg>
-                                                            </button>
-                                                            <button className="p-1">
-                                                                <svg fill="#000000" height="8px" width="8px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31.112 31.112">
-                                                                    <polygon points="31.112,1.414 29.698,0 15.556,14.142 1.414,0 0,1.414 14.142,15.556 0,29.698 1.414,31.112 15.556,16.97 29.698,31.112 31.112,29.698 16.97,15.556 " />
-                                                                </svg>
-                                                            </button>
+                                                        <div className="flex justify-end items-center right-0 my-3">
                                                         </div>
                                                         <div>
                                                             <span>{component.widgetId}</span><br />
@@ -238,7 +264,6 @@ const DndExample = () => {
                                                 {...provided.droppableProps}
                                                 ref={provided.innerRef}
                                             >
-                                                {/* <h2 className="text-center font-bold mb-6 text-black">{val.title}</h2> */}
                                                 {
                                                     val.components?.map((component, index) => {
                                                         return (
@@ -282,7 +307,7 @@ const DndExample = () => {
                                                                                             <polygon points="31.112,1.414 29.698,0 15.556,14.142 1.414,0 0,1.414 14.142,15.556 0,29.698 1.414,31.112 15.556,16.97 29.698,31.112 31.112,29.698 16.97,15.556 " />
                                                                                         </svg>
                                                                                     </button>
-                                                                                    <EditModal isOpen = {isEditModalOpen} idToEdit={selectedWidget} onClose={cancelEditModal} onEdit={editDashboard} widgetSelect={handleWidgetSelect} widgetDeselect={handleWidgetDeselect} />
+                                                                                    <EditModal isOpen={isEditModalOpen} idToEdit={selectedWidget} onClose={cancelEditModal} onEdit={editDashboard} widgetSelect={handleWidgetSelect} widgetDeselect={handleWidgetDeselect} />
                                                                                     <ConfirmModal isOpen={confirmModalOpen} onClose={handleCancel} onConfirm={handleFilter} />
                                                                                 </div>
                                                                                 <div>
@@ -304,7 +329,6 @@ const DndExample = () => {
                             )
                         })
                 }
-
             </div>
             <div>
                 {isModalOpen && (
