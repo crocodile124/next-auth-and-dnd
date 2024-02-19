@@ -2,7 +2,7 @@ import "react-clock/dist/Clock.css";
 import React, { useState, useEffect } from 'react';
 import Clock from 'react-clock';
 import moment from 'moment-timezone';
-import { getCurrentTimeInTimeZone } from "./getTimewithTimzone";
+import { getCurrentTimeInTimeZone } from "./getTimewithTimezone";
 
 interface AnalogClockProps {
   timeZone: string;
