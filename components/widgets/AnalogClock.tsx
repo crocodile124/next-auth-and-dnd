@@ -2,23 +2,22 @@ import "react-clock/dist/Clock.css";
 import React, { useState, useEffect } from 'react';
 import Clock from 'react-clock';
 import moment from 'moment-timezone';
+import { getCurrentTimeInTimeZone } from "./getTimewithTimzone";
 
 interface AnalogClockProps {
   timeZone: string;
 }
 
 const AnalogClock: React.FC<AnalogClockProps> = ({ timeZone }) => {
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [currentTime, setCurrentTime] = useState<string>(getCurrentTimeInTimeZone(timeZone));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentTime(moment.tz(timeZone).toDate());
+      setCurrentTime(getCurrentTimeInTimeZone(timeZone));
     }, 1000);
 
     return () => clearInterval(intervalId);
   }, [timeZone]);
-
-
 
   return (
     <div className="flex items-center justify-center p-4 w-full h-[252px]">
