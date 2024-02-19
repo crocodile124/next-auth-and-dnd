@@ -31,6 +31,8 @@ import EditRSSWidget from "./widgets/editWidget/EditRSSWidget";
 import { defaultRSS } from "./widgets/editWidget/defaultRSS";
 import StockChart from "./widgets/Stockchart";
 import EditStockchartWidget from "./widgets/editWidget/EditStockchartWidget";
+import CryptoPortfolio from "./widgets/CryptoPortfolio";
+
 interface Cards {
     id: number;
     title: string;
@@ -217,7 +219,11 @@ const Dnd = () => {
         }
     }, [])
     if (!data.length) {
-        return <LoadingSkeleton />
+        return (
+            <div className="w-full h-full pt-32">
+                <span className="font-bold text-6xl text-center">Loadng...</span>
+            </div>
+        )
     }
     return (
         <DndContext onDragEnd={onDragEnd}>
@@ -270,9 +276,9 @@ const Dnd = () => {
                 </svg> : <svg height="24" viewBox="0 0 24 24" width="24"><g fill="#494c4e"><path d="m19 1h-1c-2.76 0-5 2.24-5 5v3h-11c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-11c0-1.1-.9-2-2-2h-1v-3c0-1.65 1.35-3 3-3h1c1.65 0 3 1.35 3 3v6c0 .55.45 1 1 1s1-.45 1-1v-6c0-2.76-2.24-5-5-5zm-3.5 10c.28 0 .5.22.5.5v10c0 .27-.22.5-.5.5h-13c-.28 0-.5-.22-.5-.5v-10c0-.27.22-.5.5-.5z" /><path d="m11 15c0 .74-.4 1.38-1 1.73v2.27c0 .55-.45 1-1 1s-1-.45-1-1v-2.27c-.6-.35-1-.99-1-1.73 0-1.1.9-2 2-2s2 .9 2 2z" /></g></svg>}
                 </Button>
                 {
-                    isLockedLayout ?
-                        <span className="text-sm">Locked Layout</span> :
-                        <>
+                    isLockedLayout 
+                        ? <span className="text-sm">Locked Layout</span> 
+                        : <>
                             <span className="text-sm pr-6">Unlocked Layout</span>
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -317,7 +323,8 @@ const Dnd = () => {
                                                                         (component.widgetId == 2 ? <InspirationalQuotesWidget myquote={{text: component.quote_text, author: component.quote_author}} /> :
                                                                             (component.widgetId == 3 ? <RssFeedReader items={component.newsItems} /> :
                                                                                 (component.widgetId == 4 ? <StockChart symbol={component.stockChart_symbol} /> :
-                                                                                    (component.widgetId == 5 ? <CryptoPrice /> : "")))))
+                                                                                    (component.widgetId == 5 ? <CryptoPrice /> : 
+                                                                                        (component.widgetId == 6 ? <CryptoPortfolio /> : "" ))))))
                                                             }
                                                         </div>
                                                     </div>
@@ -378,7 +385,8 @@ const Dnd = () => {
                                                                                                         (component.widgetId == 2 ? <EditQutoesWidget onChangeQuotes={handleQuoteChange} /> :
                                                                                                             (component.widgetId == 3 ? <EditRSSWidget onChangeRSSItems={handleNewsChange} /> :
                                                                                                                 (component.widgetId == 4 ? <EditStockchartWidget onChangeSymbol={handleSymbolChange} /> :
-                                                                                                                    (component.widgetId == 5 ? <CryptoPrice /> : "")))))
+                                                                                                                    (component.widgetId == 5 ? <CryptoPrice /> : 
+                                                                                                                        (component.widgetId == 6 ? <CryptoPortfolio /> : ""))))))
                                                                                             }
                                                                                         </div>
                                                                                         <DialogFooter>
@@ -420,7 +428,8 @@ const Dnd = () => {
                                                                                                 (component.widgetId == 2 ? <InspirationalQuotesWidget myquote={{text: component.quote_text, author: component.quote_author}} /> :
                                                                                                     (component.widgetId == 3 ? <RssFeedReader items={component.newsItems} /> :
                                                                                                         (component.widgetId == 4 ? <StockChart symbol={component.stockChart_symbol} /> :
-                                                                                                            (component.widgetId == 5 ? <CryptoPrice /> : "")))))
+                                                                                                            (component.widgetId == 5 ? <CryptoPrice /> : 
+                                                                                                                (component.widgetId == 6 ? <CryptoPortfolio /> : ""))))))
                                                                                     }
                                                                                 </div>
                                                                             </div>
